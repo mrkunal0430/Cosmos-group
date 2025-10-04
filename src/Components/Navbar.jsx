@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { HiMenu, HiX } from "react-icons/hi"; // hamburger & close icons
+import { HiMenu, HiX } from "react-icons/hi";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -16,21 +16,30 @@ export default function Navbar() {
     ];
 
     return (
-        <header className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white fixed w-full z-50 shadow-md">
-            <div className="max-w-7xl mx-auto flex justify-between items-center p-4">
+        <header className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white fixed w-full z-50 shadow-lg">
+            <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-3 md:py-4">
+
                 {/* Brand */}
-                <Link to="/" className="text-2xl font-bold tracking-wide hover:text-yellow-400 transition">
-                    Cosmos Group
+                <Link
+                    to="/"
+                    className="flex items-center gap-2 text-xl md:text-2xl font-bold tracking-wide hover:text-yellow-400 transition"
+                >
+                    <img
+                        src="/CFG_Logo.webp"
+                        alt="CFG Logo"
+                        className="h-8 w-auto sm:h-10 object-contain"
+                    />
+                    <span className="hidden sm:inline-block">Cosmos Financial Group</span>
                 </Link>
 
                 {/* Desktop Links */}
-                <nav className="hidden md:flex gap-6">
+                <nav className="hidden md:flex gap-8 text-base font-medium">
                     {navLinks.map((link) => (
                         <NavLink
                             key={link.name}
                             to={link.path}
                             className={({ isActive }) =>
-                                `hover:text-yellow-400 transition ${isActive ? "text-yellow-400 font-semibold" : ""
+                                `hover:text-yellow-400 transition duration-300 ${isActive ? "text-yellow-400 font-semibold" : ""
                                 }`
                             }
                         >
@@ -39,32 +48,38 @@ export default function Navbar() {
                     ))}
                 </nav>
 
-                {/* Mobile Hamburger */}
-                <div className="md:hidden">
-                    <button onClick={toggleMenu} className="text-2xl focus:outline-none">
-                        {isOpen ? <HiX /> : <HiMenu />}
-                    </button>
-                </div>
+                {/* Mobile Menu Button */}
+                <button
+                    onClick={toggleMenu}
+                    className="md:hidden text-3xl text-white focus:outline-none"
+                >
+                    {isOpen ? <HiX /> : <HiMenu />}
+                </button>
             </div>
 
-            {/* Mobile Menu */}
-            {isOpen && (
-                <div className="md:hidden bg-gradient-to-b from-blue-600 to-indigo-700 px-4 py-4 space-y-4">
+            {/* Mobile Dropdown Menu */}
+            <div
+                className={`md:hidden bg-gradient-to-b from-blue-600 to-indigo-700 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                    }`}
+            >
+                <nav className="flex flex-col items-center gap-4 py-4">
                     {navLinks.map((link) => (
                         <NavLink
                             key={link.name}
                             to={link.path}
                             onClick={() => setIsOpen(false)}
                             className={({ isActive }) =>
-                                `block text-lg hover:text-yellow-400 transition ${isActive ? "text-yellow-400 font-semibold" : ""
+                                `text-lg w-full text-center transition ${isActive
+                                    ? "text-yellow-400 font-semibold"
+                                    : "text-white hover:text-yellow-400"
                                 }`
                             }
                         >
                             {link.name}
                         </NavLink>
                     ))}
-                </div>
-            )}
+                </nav>
+            </div>
         </header>
     );
 }
